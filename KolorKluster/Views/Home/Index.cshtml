@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content>
+                <v-container><div id="app">
+    {{ message }}
+</div>
+<h1>Color Cluster K-Means</h1>
+<v-card v-for="c in clusters">
+    <v-card-title>Cluster {{c.id}}</v-card-title>
+    <v-chip v-for="v in c.colors" v-bind:color='GetColor(v)'>
+
+    </v-chip>
+</v-card>
+</v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script>
+    var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!',
+        clusters:[]
+  },
+        methods:{
+        GetColor(v){
+
+        return "rgb("+v.r+","+v.g+","+v.b+")"
+        }
+        },
+  mounted(){
+        axios.get('/Home/GetClusters',{
+
+            params: {
+                numClusters: 2,
+                numDataPoints:100
+                    }
+            })
+           .then(response => {
+
+      this.clusters = response.data
+    })
+            .catch(function (error) {
+             console.log(error);
+        });
+        }
+})
+    </script>
+</body>
+</html>
